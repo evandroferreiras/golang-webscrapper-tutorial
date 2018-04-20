@@ -59,11 +59,11 @@ func scrap(url string) (r Result) {
 	header := getFirstElementByClass(htmlParsed, "header", "")
 
 	a := getFirstElementByClass(header, "a", "ds-link--styleSubtle")
-	r.nomeUsuario = getFirstTextNode(a).Data
+	r.userName = getFirstTextNode(a).Data
 
 	div := getFirstElementByClass(htmlParsed, "div", "section-content")
 	h1 := getFirstElementByClass(div, "h1", "graf--title")
-	r.titulo = getFirstTextNode(h1).Data
+	r.title = getFirstTextNode(h1).Data
 
 	footer := getFirstElementByClass(htmlParsed, "footer", "u-paddingTop10")
 	buttonLikes := getFirstElementByClass(footer, "button", "js-multirecommendCountButton")

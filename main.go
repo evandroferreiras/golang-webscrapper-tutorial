@@ -7,13 +7,13 @@ import (
 
 //Result exported
 type Result struct {
-	nomeUsuario string
-	titulo      string
-	likes       string
+	userName string
+	title    string
+	likes    string
 }
 
 func (r Result) String() string {
-	return fmt.Sprint(r.nomeUsuario, " - ", r.titulo, " - ", r.likes, " claps")
+	return fmt.Sprint(r.userName, " - ", r.title, " - ", r.likes, " claps")
 }
 
 func main() {
@@ -27,7 +27,7 @@ func main() {
 	ini := time.Now()
 	r := make(chan Result)
 	go scrapListURL(urlToProcess, r)
-
+	fmt.Println("With goroutines:")
 	for url := range r {
 		fmt.Println(url)
 	}
@@ -35,9 +35,8 @@ func main() {
 	fmt.Println("(Took ", time.Since(ini).Seconds(), "secs)")
 
 	fmt.Println()
-	fmt.Println()
-	fmt.Println()
-	fmt.Println("Without go routine:")
+
+	fmt.Println("Without goroutines:")
 	ini = time.Now()
 	for _, url := range urlToProcess {
 		r := scrap(url)

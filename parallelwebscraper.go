@@ -9,10 +9,10 @@ import (
 
 func scrapListURL(urlToProcess []string, rchan chan Result) {
 	defer close(rchan)
-	results := make([]chan Result, len(urlToProcess))
+	var results = []chan Result{}
 
 	for i, url := range urlToProcess {
-		results[i] = make(chan Result)
+		results = append(results, make(chan Result))
 		go scrapParallel(url, results[i])
 	}
 
@@ -41,11 +41,11 @@ func scrapParallel(url string, rchan chan Result) {
 	header := getFirstElementByClass(htmlParsed, "header", "")
 	var r Result
 	a := getFirstElementByClass(header, "a", "ds-link--styleSubtle")
-	r.nomeUsuario = getFirstTextNode(a).Data
+	r.userName = getFirstTextNode(a).Data
 
 	div := getFirstElementByClass(htmlParsed, "div", "section-content")
 	h1 := getFirstElementByClass(div, "h1", "graf--title")
-	r.titulo = getFirstTextNode(h1).Data
+	r.title = getFirstTextNode(h1).Data
 
 	footer := getFirstElementByClass(htmlParsed, "footer", "u-paddingTop10")
 	buttonLikes := getFirstElementByClass(footer, "button", "js-multirecommendCountButton")
