@@ -38,18 +38,30 @@ func scrapParallel(url string, rchan chan Result) {
 	if err != nil {
 		fmt.Println("ERROR: It can't parse html '", url, "'")
 	}
-	header := getFirstElementByClass(htmlParsed, "header", "")
+
 	var r Result
-	a := getFirstElementByClass(header, "a", "ds-link--styleSubtle")
-	r.userName = getFirstTextNode(a).Data
+	a := getFirstTextNode(getFirstElementByClass(htmlParsed, "a", "ds-link--styleSubtle"))
+	if a != nil {
+		r.userName = a.Data
+	} else {
+		fmt.Println("Scrap error: Can't find username. url:'", url, "'")
+	}
 
 	div := getFirstElementByClass(htmlParsed, "div", "section-content")
-	h1 := getFirstElementByClass(div, "h1", "graf--title")
-	r.title = getFirstTextNode(h1).Data
+	h1 := getFirstTextNode(getFirstElementByClass(div, "h1", "graf--title"))
+	if h1 != nil {
+		r.title = h1.Data
+	} else {
+		fmt.Println("Scrap error: Can't find title. url:'", url, "'")
+	}
 
 	footer := getFirstElementByClass(htmlParsed, "footer", "u-paddingTop10")
-	buttonLikes := getFirstElementByClass(footer, "button", "js-multirecommendCountButton")
-	r.likes = getFirstTextNode(buttonLikes).Data
+	buttonLikes := getFirstTextNode(getFirstElementByClass(footer, "button", "js-multirecommendCountButton"))
+	if buttonLikes != nil {
+		r.likes = buttonLikes.Data
+	} else {
+		fmt.Println("Scrap error: Can't find button of likes. url:'", url, "'")
+	}
 
 	rchan <- r
 }
